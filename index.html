@@ -1,0 +1,41 @@
+<html>
+    <head>
+    <!-- a websocket client -->
+    </head>
+    <body>
+        <h2>Sample websocket client</h2>
+        <div class="" style="width:40rem;border: 1px solid black;padding:6px;margin-left:4rem;margin-bottom:3rem;color:chocolate">
+            <span id="last"></span></span>
+        </div>
+        <div class="">
+            <form name="publish">
+                <input type="text" name="message">
+                <input type="submit" value="Send">
+            </form>
+        </div>
+            
+          <!-- div with messages -->
+          <div id="messages"></div>
+        <script>
+            let socket = new WebSocket("ws://192.168.56.4:4201");
+            
+            // send message from the form
+            document.forms.publish.onsubmit = function() {
+                let outgoingMessage = this.message.value;  
+                socket.send(outgoingMessage);
+                return false;
+            };
+
+            // message received - show the message in div#messages
+            socket.onmessage = function(event) {
+                let message = event.data;
+            
+                let messageElem = document.createElement('div');
+                messageElem.textContent = message;
+                document.getElementById('messages').append(messageElem);
+                document.getElementById('last').innerText = message;
+            }
+
+        </script>
+    </body>
+</html>
